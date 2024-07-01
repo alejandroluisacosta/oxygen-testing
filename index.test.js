@@ -85,14 +85,14 @@ test('Confirm occupancy is 0% if room is not occupied any day in the provided ra
     expect(room.occupancyPercentage('2024-04-06', '2024-04-06')).toBe(0);
 });
 
-test('Check if room is occupied some days in the provided range', () => {
+test('Check percentage of days the room is occupied in the provided range', () => {
     const room = new Room({...roomTemplate});
     room.bookings = bookingsTemplate;
-    room.bookings.push({checkIn: '2024-04-09', checkOut: '2024-04-30'});
+    room.bookings.push({checkIn: '2024-01-09', checkOut: '2024-01-15'});
 
-    expect(room.occupancyPercentage('2024-01-02', '2024-01-03')).toBe(66.66);
-    expect(room.occupancyPercentage('2024-03-31', '2024-04-04')).toBe(71.43);
-    expect(room.occupancyPercentage('2024-04-09', '2024-04-19')).toBe(50);
+    expect(room.occupancyPercentage('2024-01-04', '2024-01-12')).toBe(50);
+    expect(room.occupancyPercentage('2024-02-02', '2024-02-09')).toBe(25);
+    expect(room.occupancyPercentage('2024-01-01', '2024-04-05')).toBe(18.95);
 })
 
 test('Confirm occupancy is 0% if no booking are provided for the room', () => {
