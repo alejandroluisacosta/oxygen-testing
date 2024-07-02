@@ -23,16 +23,27 @@ class Room {
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
         const totalDays = Math.round((endDate - startDate) / millisecondsPerDay) + 1;
+
+        const checkDays = (date, days) => {
+            let newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + days);
+            return newDate;
+        }
+
         if (this.bookings) {
             let occupiedDays = 0;
             for (let i = 0; i < totalDays; i++) {
-                if (this.isOccupied(startDate + i)) { // HOW TO ADD 1 TO A DATE?
-                    console.log(startDate + i);
+                if (this.isOccupied(checkDays(startDate, i))) {
+                    console.log(i) 
+                    console.log(checkDays(startDate, i));
                     occupiedDays++;
                 }
             }
-            if (occupiedDays > 0)
-                return ((occupiedDays / totalDays).toFixed(2)) * 100;
+            if (occupiedDays > 0) {
+                const percentage = ((occupiedDays / totalDays) * 100).toFixed(2);
+                const floatPercentage = parseFloat(percentage);
+                return floatPercentage;
+            }
             return 0;
         }
         return 0;
