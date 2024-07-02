@@ -72,6 +72,28 @@ class Room {
     }
 }
 
+class Booking {
+    constructor({ name, email, checkIn, checkOut, discount, room }) {
+        this.name = name;
+        this.email = email;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.discount = discount;
+        this.room = room;
+    }
+
+    getFee () {
+        const originalPrice = this.room.rate;
+        const roomDiscount = this.room.discount;
+        const bookingDiscount = this.discount;
+
+        const basePrice = originalPrice * (100 - roomDiscount) / 100;
+        const finalPrice = basePrice * (100 - bookingDiscount) / 100;
+
+        return finalPrice;
+    }
+}
+
 module.exports = {
-    Room
+    Room, Booking
 };

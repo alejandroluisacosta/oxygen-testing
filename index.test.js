@@ -1,4 +1,4 @@
-const { Room } = require('./index');
+const { Room, Booking } = require('./index');
 
 const roomTemplate = new Room({name: 'Suite', rate: 10000, discount: 25});
 const bookingsTemplate = [
@@ -115,7 +115,7 @@ test('Check occupancy if check-in and check-out dates are equal', () => {
 
 // totalOccupancyPercentage
 
-describe('totalOccupancyPercentage testing', () => {
+describe('totalOccupancyPercentage method testing', () => {
     test('All rooms are occupied for the whole provided period', () => {
         const room1 = new Room({
             name: 'Suite 1',
@@ -469,7 +469,7 @@ describe('totalOccupancyPercentage testing', () => {
     })
 });
 
-describe('availableRooms testing', () => {
+describe('availableRooms method testing', () => {
     test('No room is available', () => {
         const room1 = new Room({
             name: 'Suite 1',
@@ -666,3 +666,101 @@ describe('availableRooms testing', () => {
         expect(Room.availableRooms(rooms, '2024-02-11', '2024-02-15')).toEqual([room1]);
     });
 });
+
+const bookingTemplate = new Booking({
+    name: 'Bruce Banner',
+    email: 'brucebanner1@mail.com',
+    checkIn: '2024-01-01',
+    checkOut: '2024-01-05',
+    discount: 20,
+    room: roomTemplate,
+})
+
+describe('getFee method testing', () => {
+    test('Room\'s discount is zero', () => {
+        const booking1 = bookingTemplate;
+        booking1.price = 15000;
+        booking1.room.discount = 0;
+
+        const booking2 = bookingTemplate;
+        booking2.price = 30000;
+        booking2.room.discount = 0;
+
+        const booking3 = bookingTemplate;
+        booking3.price = 45000;
+        booking3.room.discount = 0;
+
+        expect(booking1.getFee()).toBe(12000);
+        expect(booking2.getFee()).toBe(24000);
+        expect(booking3.getFee()).toBe(36000);
+    });
+
+    test('Booking\'s discount is zero', () => {
+        const booking1 = bookingTemplate;
+        booking1.price = 15000;
+        booking1.discount = 0;
+
+        const booking2 = bookingTemplate;
+        booking2.price = 30000;
+        booking2.discount = 0;
+
+        const booking3 = bookingTemplate;
+        booking3.price = 45000;
+        booking3.discount = 0;
+
+        expect(booking1.getFee()).toBe(11250);
+        expect(booking2.getFee()).toBe(22500);
+        expect(booking3.getFee()).toBe(33750);
+    });
+
+    test('Room\'s price is zero', () => {
+        const booking1 = bookingTemplate;
+        booking1.price = 0;
+
+        const booking2 = bookingTemplate;
+        booking2.price = 0;
+
+        const booking3 = bookingTemplate;
+        booking3.price = 0;
+
+        expect(booking1.getFee()).toBe(0);
+        expect(booking2.getFee()).toBe(0);
+        expect(booking3.getFee()).toBe(0);
+    });
+
+    test('Either discount is 100%', () => {
+        const booking1 = bookingTemplate;
+        booking1.price = 15000;
+        booking1.discount = 100;
+
+        const booking2 = bookingTemplate;
+        booking2.price = 30000;
+        booking2.room.discount = 100;
+        
+        const booking3 = bookingTemplate;
+        booking3.price = 45000;
+        booking3.discount = 100;
+        booking3.room.discount = 100;
+        
+        expect(booking1.getFee()).toBe(0);
+        expect(booking2.getFee()).toBe(0);
+        expect(booking3.getFee()).toBe(0);
+    });
+
+    test('Both discounts are between 1 and 99%', () => {
+        const booking1 = bookingTemplate;
+        booking1.price = 15000;
+
+        const booking2 = bookingTemplate;
+        booking2.price = 30000;
+        booking2.room.discount = 15;
+        
+        const booking3 = bookingTemplate;
+        booking3.price = 45000;
+        booking3.discount = 15;
+
+        expect(booking1.getFee()).toBe(9000);
+        expect(booking2.getFee()).toBe(20400);
+        expect(booking2.getFee()).toBe(28687.50);
+    })
+})
