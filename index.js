@@ -1,5 +1,5 @@
 class Room {
-    constructor(name, bookings, rate, discount) {
+    constructor({ name, bookings, rate, discount }) {
         this.name = name;
         this.bookings = bookings || [];
         this.rate = rate || 0;
@@ -34,8 +34,6 @@ class Room {
             let occupiedDays = 0;
             for (let i = 0; i < totalDays; i++) {
                 if (this.isOccupied(checkDays(startDate, i))) {
-                    console.log(i) 
-                    console.log(checkDays(startDate, i));
                     occupiedDays++;
                 }
             }
@@ -50,7 +48,17 @@ class Room {
     }
 
     static totalOccupancyPercentage(rooms, startDate, endDate) {
-
+        if (!rooms) {
+            throw('No rooms selected');
+        }
+        let aggregatePercentage = 0;
+        rooms.forEach(room => {
+            const individualPercentage = room.occupancyPercentage(startDate, endDate);
+            aggregatePercentage += individualPercentage;
+        });
+        const totalPercentage = (aggregatePercentage / rooms.length).toFixed(2);
+        const result = parseFloat(totalPercentage);
+        return result;
     }
 
     static availableRooms(rooms, startDate, endDate) {
