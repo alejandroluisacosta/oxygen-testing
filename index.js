@@ -84,6 +84,7 @@ class Booking {
 
     getFee () {
         const originalPrice = this.room.rate;
+        console.log(this);
         const roomDiscount = this.room.discount;
         const bookingDiscount = this.discount;
 
