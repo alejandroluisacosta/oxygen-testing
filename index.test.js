@@ -7,6 +7,14 @@ const booking2 = new Booking({ checkIn: '2024-02-01', checkOut: '2024-02-04' });
 const booking3 = new Booking({ checkIn: '2024-03-30', checkOut: '2024-04-05' });
 const bookingsTemplate = [ booking1, booking2, booking3 ];
 
+const bookingTemplate = new Booking({
+    name: 'Bruce Banner',
+    email: 'brucebanner1@mail.com',
+    checkIn: '2024-01-01',
+    checkOut: '2024-01-05',
+    discount: 20,
+})
+
 describe('isOccupied', () => {
     describe('Check if room is occupied on date that is not the last day of any booking', () => {
         test('Date is first day of booking', () => {
@@ -451,16 +459,8 @@ describe('availableRooms', () => {
     });
 });
 
-const bookingTemplate = new Booking({
-    name: 'Bruce Banner',
-    email: 'brucebanner1@mail.com',
-    checkIn: '2024-01-01',
-    checkOut: '2024-01-05',
-    discount: 20,
-})
-
 describe('getFee', () => {
-    test('Room\'s discount is zero', () => {
+    describe('Room\'s discount is zero', () => {
         const booking1 = new Booking({...bookingTemplate});
         booking1.room = new Room({...roomTemplate});
         booking1.room.rate = 15000;
@@ -476,12 +476,20 @@ describe('getFee', () => {
         booking3.room.rate = 45000;
         booking3.room.discount = 0;
 
-        expect(booking1.getFee()).toBe(12000);
-        expect(booking2.getFee()).toBe(24000);
-        expect(booking3.getFee()).toBe(36000);
+        test('Room\'s price = 150000', () => {
+            expect(booking1.getFee()).toBe(12000);
+        });
+        
+        test('Room\'s price = 30000', () => {
+            expect(booking2.getFee()).toBe(24000);
+        });
+
+        test('Room\'s price = 450000', () => {
+            expect(booking3.getFee()).toBe(36000);
+        });
     });
 
-    test('Booking\'s discount is zero', () => {
+    describe('Booking\'s discount is zero', () => {
         const booking1 = new Booking({...bookingTemplate});
         booking1.room = new Room({...roomTemplate});
         booking1.room.rate = 15000;
@@ -497,30 +505,30 @@ describe('getFee', () => {
         booking3.room.rate = 45000;
         booking3.discount = 0;
 
-        expect(booking1.getFee()).toBe(11250);
-        expect(booking2.getFee()).toBe(22500);
-        expect(booking3.getFee()).toBe(33750);
+        test('Room\'s price = 15000', () => {
+            expect(booking1.getFee()).toBe(11250);
+        });
+
+        test('Room\'s price = 30000', () => {
+            expect(booking2.getFee()).toBe(22500);
+        });
+
+        test('Room\'s price = 45000', () => {
+            expect(booking3.getFee()).toBe(33750);
+        });
     });
 
-    test('Room\'s price is zero', () => {
+    describe('Room\'s price is zero', () => {
         const booking1 = new Booking({...bookingTemplate});
         booking1.room = new Room({...roomTemplate});
         booking1.room.rate = 0;
 
-        const booking2 = new Booking({...bookingTemplate});
-        booking2.room = new Room({...roomTemplate});
-        booking2.room.rate = 0;
-
-        const booking3 = new Booking({...bookingTemplate});
-        booking3.room = new Room({...roomTemplate});
-        booking3.room.rate = 0;
-
-        expect(booking1.getFee()).toBe(0);
-        expect(booking2.getFee()).toBe(0);
-        expect(booking3.getFee()).toBe(0);
+        test('Case #1', ()  => {
+            expect(booking1.getFee()).toBe(0);
+        })
     });
 
-    test('Either discount is 100%', () => {
+    describe('Either discount is 100%', () => {
         const booking1 = new Booking({...bookingTemplate});
         booking1.room = new Room({...roomTemplate});
         booking1.room.rate = 15000;
@@ -536,12 +544,20 @@ describe('getFee', () => {
         booking3.discount = 100;
         booking3.room.discount = 100;
         
-        expect(booking1.getFee()).toBe(0);
-        expect(booking2.getFee()).toBe(0);
-        expect(booking3.getFee()).toBe(0);
+        test('Booking\'s discount is 100%', () => {
+            expect(booking1.getFee()).toBe(0);
+        });
+
+        test('Room\'s discount is 100%', () => {
+            expect(booking2.getFee()).toBe(0);
+        });
+
+        test('Both discounts are 100%', () => {
+            expect(booking3.getFee()).toBe(0);
+        });
     });
 
-    test('Both discounts are between 1 and 99%', () => {
+    describe('Both discounts are between 1 and 99%', () => {
         const booking1 = new Booking({...bookingTemplate});
         booking1.room = new Room({...roomTemplate});
         booking1.room.rate = 15000;
@@ -556,8 +572,16 @@ describe('getFee', () => {
         booking3.room.rate = 45000;
         booking3.discount = 15;
 
-        expect(booking1.getFee()).toBe(9000);
-        expect(booking2.getFee()).toBe(20400);
-        expect(booking3.getFee()).toBe(28687.50);
+        test('Case #1', () => {
+            expect(booking1.getFee()).toBe(9000);
+        });
+
+        test('Case #2', () => {
+            expect(booking2.getFee()).toBe(20400);
+        });
+        
+        test('Case #3', () => {
+            expect(booking3.getFee()).toBe(28687.50);
+        });
     });
 })
