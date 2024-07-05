@@ -37,14 +37,10 @@ class Room {
                     occupiedDays++;
                 }
             }
-            if (occupiedDays > 0) {
-                const percentage = ((occupiedDays / totalDays) * 100).toFixed(2);
-                const floatPercentage = parseFloat(percentage);
-                return floatPercentage;
-            }
-            return 0;
+            const percentage = ((occupiedDays / totalDays) * 100).toFixed(2);
+            const floatPercentage = parseFloat(percentage);
+            return floatPercentage;
         }
-        return 0;
     }
 
     static totalOccupancyPercentage(rooms, startDate, endDate) {
@@ -62,13 +58,7 @@ class Room {
     }
 
     static availableRooms(rooms, startDate, endDate) {
-        const availableRoomsArray = [];
-        rooms.forEach(room => {
-            if (room.occupancyPercentage(startDate, endDate) === 0) {
-                availableRoomsArray.push(room);
-            }
-        })
-        return availableRoomsArray;
+        return rooms.filter(room => room.occupancyPercentage(startDate, endDate) === 0)
     }
 }
 
