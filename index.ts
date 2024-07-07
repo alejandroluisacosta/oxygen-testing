@@ -1,4 +1,9 @@
-class Room {
+export class Room {
+    name: string;
+    bookings: Booking[];
+    rate: number;
+    discount: number;
+
     constructor({ name, bookings, rate, discount }) {
         this.name = name;
         this.bookings = bookings || [];
@@ -18,7 +23,7 @@ class Room {
         return false;
     }
 
-    occupancyPercentage(start, end) {
+    occupancyPercentage(start: string, end: string) {
         const startDate = new Date(start);
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
@@ -84,6 +89,6 @@ class Booking {
     }
 }
 
-module.exports = {
-    Room, Booking
-};
+// module.exports = {
+//     Room, Booking
+// };

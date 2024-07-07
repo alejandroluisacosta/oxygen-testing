@@ -1,4 +1,6 @@
-const { Room, Booking } = require('./index');
+// const { Room, Booking } = require('./index');
+
+import { Room } from './index';
 
 const roomTemplate = ({name: 'Suite', rate: 10000, discount: 25});
 
