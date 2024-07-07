@@ -1,4 +1,9 @@
-class Room {
+export class Room {
+    name: string;
+    bookings: Booking[];
+    rate: number;
+    discount: number;
+
     constructor({ name, bookings, rate, discount }) {
         this.name = name;
         this.bookings = bookings || [];
@@ -6,7 +11,7 @@ class Room {
         this.discount = discount || 0;
     }
 
-    isOccupied(date) {
+    isOccupied(date: string | Date) {
         const checkDate = new Date(date);
         if (this.bookings) {
             return this.bookings.some(booking => {
@@ -18,13 +23,13 @@ class Room {
         return false;
     }
 
-    occupancyPercentage(start, end) {
+    occupancyPercentage(start: string, end: string) {
         const startDate = new Date(start);
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
-        const totalDays = Math.round((endDate - startDate) / millisecondsPerDay) + 1;
+        const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / millisecondsPerDay) + 1;
 
-        const checkDays = (date, days) => {
+        const checkDays = (date: string, days: number) => {
             let newDate = new Date(date);
             newDate.setDate(newDate.getDate() + days);
             return newDate;
@@ -33,7 +38,7 @@ class Room {
         if (this.bookings) {
             let occupiedDays = 0;
             for (let i = 0; i < totalDays; i++) {
-                if (this.isOccupied(checkDays(startDate, i))) {
+                if (this.isOccupied(checkDays(start, i))) {
                     occupiedDays++;
                 }
             }
@@ -62,7 +67,14 @@ class Room {
     }
 }
 
-class Booking {
+export class Booking {
+    name: string;
+    email: string;
+    checkIn: string;
+    checkOut: string;
+    discount: number;
+    room: Room;
+
     constructor({ name, email, checkIn, checkOut, discount, room }) {
         this.name = name;
         this.email = email;
