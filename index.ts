@@ -27,7 +27,7 @@ export class Room {
         const startDate = new Date(start);
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
-        const totalDays = Math.round((endDate.getDate() - startDate.getDate()) / millisecondsPerDay) + 1;
+        const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / millisecondsPerDay) + 1;
 
         const checkDays = (date: string, days: number) => {
             let newDate = new Date(date);

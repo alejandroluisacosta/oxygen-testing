@@ -2,7 +2,7 @@
 
 import { Room, Booking } from './index';
 
-const roomTemplate = new Room({name: 'Suite', bookings: {checkIn: 'none', checkOut: 'none'}, rate: 10000, discount: 25});
+const roomTemplate = new Room({name: 'Suite', bookings: [{checkIn: '2024-01-01', checkOut: '2024-01-01'}], rate: 10000, discount: 25});
 
 const booking1 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-01-01', checkOut: '2024-01-04', discount: 15, room: {...roomTemplate}});
 const booking2 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-02-01', checkOut: '2024-02-04', discount: 15, room: {...roomTemplate}});
