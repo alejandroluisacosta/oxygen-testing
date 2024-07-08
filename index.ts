@@ -1,10 +1,23 @@
+const checkDays = (date: string, days: number) => {
+    let newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + days);
+    return newDate;
+}
+
+interface RoomInput {
+    name: string;
+    bookings: Booking[];
+    rate: number;
+    discount: number;
+}
+
 export class Room {
     name: string;
     bookings: Booking[];
     rate: number;
     discount: number;
 
-    constructor({ name, bookings, rate, discount }) {
+    constructor({ name, bookings, rate, discount }: RoomInput) {
         this.name = name;
         this.bookings = bookings || [];
         this.rate = rate || 0;
@@ -28,12 +41,6 @@ export class Room {
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
         const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / millisecondsPerDay) + 1;
-
-        const checkDays = (date: string, days: number) => {
-            let newDate = new Date(date);
-            newDate.setDate(newDate.getDate() + days);
-            return newDate;
-        }
 
         let occupiedDays = 0;
         for (let i = 0; i < totalDays; i++) {
@@ -65,6 +72,15 @@ export class Room {
     }
 }
 
+interface BookingInput {
+    name: string;
+    email: string;
+    checkIn: string;
+    checkOut: string;
+    discount: number;
+    room: Room;
+}
+
 export class Booking {
     name: string;
     email: string;
@@ -73,7 +89,7 @@ export class Booking {
     discount: number;
     room: Room;
 
-    constructor({ name, email, checkIn, checkOut, discount, room }) {
+    constructor({ name, email, checkIn, checkOut, discount, room }: BookingInput) {
         this.name = name;
         this.email = email;
         this.checkIn = checkIn;
@@ -93,7 +109,3 @@ export class Booking {
         return finalPrice;
     }
 }
-
-module.exports = {
-    Room, Booking
-};
