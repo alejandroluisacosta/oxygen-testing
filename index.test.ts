@@ -1,13 +1,13 @@
-// const { Room, Booking } = require('./index');
-
 import { Room, Booking } from './index';
 
-const roomTemplate = new Room({name: 'Suite', bookings: [{checkIn: '2024-01-01', checkOut: '2024-01-01'}], rate: 10000, discount: 25});
+const roomTemplate = {name: 'Suite', bookings: [new Booking({checkIn: '2024-01-01', checkOut: '2024-01-01', name: 'Albert Einstein', email: 'albert@verysmart.com', discount: 10, room: {}})], rate: 10000, discount: 25};
 
-const booking1 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-01-01', checkOut: '2024-01-04', discount: 15, room: {...roomTemplate}});
-const booking2 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-02-01', checkOut: '2024-02-04', discount: 15, room: {...roomTemplate}});
-const booking3 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-03-30', checkOut: '2024-04-05', discount: 15, room: {...roomTemplate}});
+const booking1 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-01-01', checkOut: '2024-01-04', discount: 15, room: new Room({...roomTemplate})});
+const booking2 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-02-01', checkOut: '2024-02-04', discount: 15, room: new Room({...roomTemplate})});
+const booking3 = new Booking({ name: 'James Hetfield', email: 'james@metallica.com', checkIn: '2024-03-30', checkOut: '2024-04-05', discount: 15, room: new Room({...roomTemplate})});
 const bookingsTemplate = [ booking1, booking2, booking3 ];
+
+roomTemplate.bookings = [booking1];
 
 const bookingTemplate = new Booking({
     name: 'Bruce Banner',
@@ -15,7 +15,7 @@ const bookingTemplate = new Booking({
     checkIn: '2024-01-01',
     checkOut: '2024-01-05',
     discount: 20,
-    room: {...roomTemplate},
+    room: new Room({...roomTemplate}),
 })
 
 describe('isOccupied', () => {
