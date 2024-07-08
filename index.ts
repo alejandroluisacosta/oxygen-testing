@@ -11,7 +11,7 @@ export class Room {
         this.discount = discount || 0;
     }
 
-    isOccupied(date: string | Date) {
+    isOccupied(date: string | Date): boolean {
         const checkDate = new Date(date);
         if (this.bookings) {
             return this.bookings.some(booking => {
@@ -23,7 +23,7 @@ export class Room {
         return false;
     }
 
-    occupancyPercentage(start: string, end: string) {
+    occupancyPercentage(start: string, end: string): number {
         const startDate = new Date(start);
         const endDate = new Date(end);
         const millisecondsPerDay = 24 * 60 * 60 * 1000;
@@ -35,20 +35,18 @@ export class Room {
             return newDate;
         }
 
-        if (this.bookings) {
-            let occupiedDays = 0;
-            for (let i = 0; i < totalDays; i++) {
-                if (this.isOccupied(checkDays(start, i))) {
-                    occupiedDays++;
-                }
+        let occupiedDays = 0;
+        for (let i = 0; i < totalDays; i++) {
+            if (this.isOccupied(checkDays(start, i))) {
+                occupiedDays++;
             }
-            const percentage = ((occupiedDays / totalDays) * 100).toFixed(2);
-            const floatPercentage = parseFloat(percentage);
-            return floatPercentage;
         }
+        const percentage = ((occupiedDays / totalDays) * 100).toFixed(2);
+        const floatPercentage = parseFloat(percentage);
+        return floatPercentage;
     }
 
-    static totalOccupancyPercentage(rooms, startDate, endDate) {
+    static totalOccupancyPercentage(rooms: Room[], startDate: string, endDate: string): number {
         if (!rooms) {
             throw('No rooms selected');
         }
@@ -62,7 +60,7 @@ export class Room {
         return result;
     }
 
-    static availableRooms(rooms, startDate, endDate) {
+    static availableRooms(rooms: Room[], startDate: string, endDate: string): Room[] {
         return rooms.filter(room => room.occupancyPercentage(startDate, endDate) === 0)
     }
 }
@@ -84,7 +82,7 @@ export class Booking {
         this.room = room;
     }
 
-    getFee () {
+    getFee (): number {
         const originalPrice = this.room.rate;
         const roomDiscount = this.room.discount;
         const bookingDiscount = this.discount;
